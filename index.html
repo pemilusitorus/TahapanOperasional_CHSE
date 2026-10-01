@@ -1,0 +1,2212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorium Maya Interaktif SMK - CHSE, K3 & Higiene</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --accent-green: #10b981;
+            --accent-blue: #3b82f6;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --glow-green: 0 0 15px rgba(16, 185, 129, 0.4);
+            --glow-blue: 0 0 15px rgba(59, 130, 246, 0.4);
+            --glow-amber: 0 0 15px rgba(245, 158, 11, 0.4);
+            --glow-red: 0 0 15px rgba(239, 68, 68, 0.4);
+            --font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body, html {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            font-family: var(--font-family);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+        }
+
+        #app-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        header {
+            height: 64px;
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            z-index: 20;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--glow-blue);
+        }
+
+        .brand-title h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+        }
+
+        .brand-title p {
+            font-size: 0.72rem;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            background: rgba(15, 23, 42, 0.6);
+            padding: 4px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn:hover {
+            color: var(--text-light);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-btn.active {
+            background: var(--accent-blue);
+            color: #ffffff;
+            box-shadow: var(--glow-blue);
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sound-toggle, .btn-reset-head {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .sound-toggle:hover, .btn-reset-head:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-cyan);
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .sidebar {
+            width: 320px;
+            background: rgba(30, 41, 59, 0.6);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            gap: 1rem;
+            overflow-y: auto;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-light);
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 10px;
+            background: #0f172a;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+            transition: width 0.3s ease;
+        }
+
+        .lives-container {
+            display: flex;
+            gap: 6px;
+            font-size: 1.4rem;
+        }
+
+        .badge-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .badge-item {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge-item.unlocked {
+            border-color: var(--accent-amber);
+            color: var(--accent-amber);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .checklist-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 240px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            padding: 6px 10px;
+            border-radius: 6px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .check-item.done {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: var(--accent-green);
+        }
+
+        .check-item.active {
+            border-color: var(--accent-blue);
+            color: var(--text-light);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .check-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .check-item.done .check-icon {
+            border-color: var(--accent-green);
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        .content-area {
+            flex: 1;
+            position: relative;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .tab-panel {
+            display: none;
+            width: 100%;
+            height: 100%;
+            padding: 1.5rem;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-panel.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Splash Screen */
+        .splash-screen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .splash-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            padding: 3rem;
+            border-radius: 24px;
+            max-width: 600px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            backdrop-filter: blur(16px);
+        }
+
+        .splash-logo {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--glow-blue);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-blue), #2563eb);
+            color: #ffffff;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: var(--glow-blue);
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.6);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card-hover);
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .simulation-view {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            gap: 1rem;
+        }
+
+        .sim-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card);
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .sim-stage-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sim-controls-top {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .mode-badge {
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid var(--accent-purple);
+            color: var(--accent-purple);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .sim-workspace {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* SVG Virtual Lab Environment */
+        .lab-canvas {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .interactive-zone {
+            position: absolute;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+        }
+
+        .interactive-zone:hover {
+            transform: scale(1.03);
+            filter: brightness(1.2);
+        }
+
+        .interactive-zone.pulse {
+            animation: pulseGlow 1.8s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { box-shadow: 0 0 0 12px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+
+        .sim-feedback-box {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            right: 12px;
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid var(--accent-blue);
+            border-radius: 10px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(8px);
+            z-index: 10;
+        }
+
+        .feedback-text {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.92rem;
+            color: var(--text-light);
+        }
+
+        .sim-action-bar {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            padding: 0.5rem 0;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+
+        .card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        .card-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            background: rgba(15, 23, 42, 0.6);
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        .card-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* SOP Steps timeline */
+        .sop-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .sop-step-item {
+            display: flex;
+            gap: 1.25rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1.25rem;
+            border-radius: 12px;
+            align-items: flex-start;
+        }
+
+        .sop-number {
+            width: 36px;
+            height: 36px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+            box-shadow: var(--glow-blue);
+        }
+
+        /* Modal dialog overlay */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 550px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);
+        }
+
+        /* Certificate Styling */
+        .cert-card {
+            background: #ffffff;
+            color: #0f172a;
+            border-radius: 16px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 700px;
+            border: 8px double #1e293b;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+
+        .cert-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #1e293b;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .cert-sub {
+            font-size: 0.95rem;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .cert-score-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin: 1rem 0;
+            background: #f1f5f9;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .cert-score-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.75rem;
+            color: #475569;
+        }
+
+        .cert-score-val {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #0284c7;
+        }
+
+        /* Mini Quiz Layout */
+        .quiz-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .quiz-btn {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quiz-btn:hover {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .quiz-btn.correct {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .quiz-btn.wrong {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+        }
+
+        /* Responsive scale tweaks */
+        @media (max-width: 1280px) {
+            .sidebar { width: 280px; }
+            .grid-3 { grid-template-columns: repeat(2, 1fr); }
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div id="app-container">
+        
+        <!-- Splash Screen Overlay -->
+        <div id="splash-screen" class="splash-screen">
+            <div class="splash-card">
+                <div class="splash-logo">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="M9 12l2 2 4-4"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 style="font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 6px;">VIRTUAL LAB SMK</h1>
+                    <p style="font-size: 1.1rem; color: var(--accent-cyan); font-weight: 700; margin-bottom: 8px;">TAHAPAN OPERASIONAL CHSE • K3 • HIGIENE</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Pembelajaran Interaktif Berbasis Simulasi untuk SMK Fase E</p>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 12px 20px; border-radius: 10px; border: 1px solid var(--border-color); width: 100%; text-align: left; font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;">
+                    <p>👨‍🏫 <strong>Pengembang:</strong> Pemilu Sitorus, M.Pd</p>
+                    <p>🎯 <strong>Target:</strong> Peserta Didik SMK Fase E</p>
+                    <p>⚡ <strong>Mode:</strong> Learning by Doing & Problem-Based Learning</p>
+                </div>
+                <button class="btn-primary" id="btn-enter-lab" onclick="enterLaboratory()">
+                    <span>MASUK LABORATORIUM MAYA</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <header>
+            <div class="brand">
+                <div class="brand-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <div class="brand-title">
+                    <h1>VIRTUAL LAB SMK</h1>
+                    <p>CHSE • K3 • HIGIENE — FASE E</p>
+                </div>
+            </div>
+
+            <nav class="nav-tabs">
+                <button class="nav-btn active" id="tab-btn-teori" onclick="switchTab('teori')">
+                    <span>📖</span> TEORI
+                </button>
+                <button class="nav-btn" id="tab-btn-prosedur" onclick="switchTab('prosedur')">
+                    <span>📋</span> PROSEDUR
+                </button>
+                <button class="nav-btn" id="tab-btn-simulasi" onclick="switchTab('simulasi')">
+                    <span>🧪</span> SIMULASI
+                </button>
+                <button class="nav-btn" id="tab-btn-pengembang" onclick="switchTab('pengembang')">
+                    <span>👨‍🏫</span> PENGEMBANG
+                </button>
+            </nav>
+
+            <div class="header-controls">
+                <button class="sound-toggle" id="sound-btn" onclick="toggleSound()">
+                    <span id="sound-icon">🔊</span>
+                    <span id="sound-text">SOUND ON</span>
+                </button>
+                <button class="btn-reset-head" onclick="promptReset()">
+                    <span>↻</span> RESET
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <!-- Sidebar / Metrics Panel -->
+            <aside class="sidebar">
+                <!-- Score Card -->
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span>SKOR UTAMA</span>
+                        <span id="mode-indicator-side" style="color: var(--accent-purple);">LATIHAN</span>
+                    </div>
+                    <div style="display: flex; align-items: baseline; justify-content: space-between;">
+                        <span class="stat-value" id="score-display">0</span>
+                        <span style="font-size: 0.9rem; color: var(--text-muted);">/ 100 MAX</span>
+                    </div>
+                </div>
+
+                <!-- Progress & Timer -->
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span>PROGRESS SIMULASI</span>
+                        <span id="timer-display">00:00</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progress-fill"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">
+                        <span>CAPAIAN: <strong id="progress-text" style="color: var(--accent-cyan);">0%</strong></span>
+                        <span>TAHAP: <strong id="stage-text">1 / 8</strong></span>
+                    </div>
+                </div>
+
+                <!-- Lives / Mistakes -->
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span>KESEMPATAN (NYAWA)</span>
+                    </div>
+                    <div class="lives-container" id="lives-display">
+                        ❤️ ❤️ ❤️
+                    </div>
+                </div>
+
+                <!-- Badges -->
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span>PENCAPAIAN BADGE</span>
+                    </div>
+                    <div class="badge-list" id="badge-container">
+                        <div class="badge-item" id="badge-chse">🌱 CHSE Beginner</div>
+                        <div class="badge-item" id="badge-safety">⚠️ Safety Observer</div>
+                        <div class="badge-item" id="badge-hygiene">🧼 Hygiene Expert</div>
+                        <div class="badge-item" id="badge-champion">🛡️ Safety Champion</div>
+                        <div class="badge-item" id="badge-master">🏆 Lab Master</div>
+                    </div>
+                </div>
+
+                <!-- SOP Checklist -->
+                <div class="stat-card" style="flex: 1;">
+                    <div class="stat-header">
+                        <span>CHECKLIST PROSEDUR</span>
+                    </div>
+                    <div class="checklist-container" id="checklist-box">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Interactive Content Panels -->
+            <section class="content-area">
+                
+                <div id="tab-teori" class="tab-panel active">
+                    <div style="margin-bottom: 1.5rem;">
+                        <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff;">MODUL TEORI & KONSEP K3, CHSE, & HIGIENE</h2>
+                        <p style="font-size: 0.88rem; color: var(--text-muted);">Pelajari landasan materi sebelum mempraktikkan tahapan di laboratorium maya.</p>
+                    </div>
+
+                    <!-- Cards Grid -->
+                    <div class="grid-3" style="margin-bottom: 2rem;">
+                        <div class="card">
+                            <div class="card-icon" style="color: var(--accent-green);">🧼</div>
+                            <div class="card-title">C — Cleanliness (Kebersihan)</div>
+                            <div class="card-desc">Memastikan seluruh diri, peralatan, dan lingkungan kerja bebas dari kotoran, debu, dan mikroorganisme berbahaya.</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-icon" style="color: var(--accent-blue);">🩺</div>
+                            <div class="card-title">H — Health (Kesehatan)</div>
+                            <div class="card-desc">Penerapan kondisi kesehatan fisik pekerja, sanitasi bebas kuman, serta pencegahan penyakit akibat kerja.</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-icon" style="color: var(--accent-amber);">⚠️</div>
+                            <div class="card-title">S — Safety (Keselamatan Kerja)</div>
+                            <div class="card-desc">Penggunaan APD lengkap, pengenalan potensi bahaya, penataan kabel, dan bebas dari risiko kecelakaan kerja.</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-icon" style="color: var(--accent-cyan);">🌱</div>
+                            <div class="card-title">E — Environment (Lingkungan)</div>
+                            <div class="card-desc">Pengelolaan limbah B3 dan organik/anorganik secara bijak, efisiensi energi, serta keberlanjutan ekosistem.</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-icon" style="color: var(--accent-purple);">🧯</div>
+                            <div class="card-title">K3 & Penanganan Bahaya</div>
+                            <div class="card-desc">Prosedur sistematis identifikasi risiko (Hazard identification), evaluasi dampak, dan aksi mitigasi cepat.</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-icon" style="color: #ec4899;">🥽</div>
+                            <div class="card-title">Alat Pelindung Diri (APD)</div>
+                            <div class="card-desc">Kelengkapan wajib operator: Masker, Sarung Tangan, Sepatu K3, Apron, Penutup Kepala, dan Goggles.</div>
+                        </div>
+                    </div>
+
+                    <!-- Mini Quiz Container -->
+                    <div class="quiz-container">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h3 style="font-size: 1.1rem; color: var(--accent-cyan); font-weight: 700;">QUIZ EVALUASI PEMAHAMAN KONSEP</h3>
+                            <span id="quiz-progress-num" style="font-size: 0.85rem; color: var(--text-muted);">Soal 1 / 15</span>
+                        </div>
+                        <div id="quiz-question" style="font-size: 1rem; color: #fff; font-weight: 600; line-height: 1.4;">
+                            Loading kuis...
+                        </div>
+                        <div class="quiz-options" id="quiz-options-box">
+                            <!-- Populated dynamically -->
+                        </div>
+                        <div id="quiz-feedback" style="display: none; padding: 10px; border-radius: 8px; font-size: 0.88rem; font-weight: 600;"></div>
+                        <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                            <button class="btn-secondary" onclick="nextQuizQuestion()">Soal Berikutnya ➔</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-prosedur" class="tab-panel">
+                    <div style="margin-bottom: 1.5rem;">
+                        <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff;">STANDAR OPERASIONAL PROSEDUR (SOP)</h2>
+                        <p style="font-size: 0.88rem; color: var(--text-muted);">Urutan tahapan baku operasional kerja aman, higienis, dan ramah lingkungan.</p>
+                    </div>
+
+                    <div class="sop-list">
+                        <div class="sop-step-item">
+                            <div class="sop-number">01</div>
+                            <div>
+                                <h4 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 4px;">Pemeriksaan Kondisi Diri</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Memastikan kerapian seragam, kebersihan kuku, kebersihan rambut/penutup kepala, dan kondisi fisik sehat tidak menular sebelum memasuk area kerja.</p>
+                            </div>
+                        </div>
+
+                        <div class="sop-step-item">
+                            <div class="sop-number">02</div>
+                            <div>
+                                <h4 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 4px;">Kebersihan Tangan (8 Langkah Higienis)</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Mencuci tangan dengan air mengalir dan sabun: menggosok telapak, punggung tangan, sela jari, kuku, membilas, dan mengeringkan menggunakan tisu steril.</p>
+                            </div>
+                        </div>
+
+                        <div class="sop-step-item">
+                            <div class="sop-number">03</div>
+                            <div>
+                                <h4 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 4px;">Penggunaan Alat Pelindung Diri (APD)</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Memakai APD secara berurutan: penutup kepala, apron, masker medis, sepatu K3 tertutup, dan sarung tangan steril.</p>
+                            </div>
+                        </div>
+
+                        <div class="sop-step-item">
+                            <div class="sop-number">04</div>
+                            <div>
+                                <h4 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 4px;">Pemeriksaan Area & Identifikasi Potensi Bahaya</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Melakukan inspeksi visual area: mengidentifikasi lantai licin, kabel melintang, cairan tumpah, dan memastikan jalur evakuasi tidak terhalang.</p>
+                            </div>
+                        </div>
+
+                        <div class="sop-step-item">
+                            <div class="sop-number">05</div>
+                            <div>
+                                <h4 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 4px;">Penerapan Matriks CHSE</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Memastikan keselarasan standar Cleanliness, Health, Safety, dan Environment di seluruh lini ruang kerja.</p>
+                            </div>
+                        </div>
+
+                        <div class="sop-step-item">
+                            <div class="sop-number">06</div>
+                            <div>
+                                <h4 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 4px;">Penanganan Keselamatan Kerja & Mitigasi Risiko</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Mengatasi secara aktif bahaya terpeleset, masalah kelistrikan, dan penataan alat kerja pada posisi aman.</p>
+                            </div>
+                        </div>
+
+                        <div class="sop-step-item">
+                            <div class="sop-number">07</div>
+                            <div>
+                                <h4 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 4px;">Pembersihan Higienis & Sanitasi Alat</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Melakukan disinfeksi permukaan kerja, menyeka meja dengan sanitisos, dan membersihkan peralatan pasca operasional.</p>
+                            </div>
+                        </div>
+
+                        <div class="sop-step-item">
+                            <div class="sop-number">08</div>
+                            <div>
+                                <h4 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 4px;">Pengelolaan Limbah Terpilah</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">Memisahkan sisa buangan ke dalam kategori: Tempat Sampah Organik (Hijau), Anorganik (Kuning), B3/Cairan Kimia (Merah).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-simulasi" class="tab-panel">
+                    <div class="simulation-view">
+                        <!-- Top Controls -->
+                        <div class="sim-header">
+                            <div class="sim-stage-title" id="sim-stage-label">
+                                <span>TAHAP 1: PEMERIKSAAN KONDISI DIRI</span>
+                            </div>
+
+                            <div class="sim-controls-top">
+                                <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">MODE:</label>
+                                <select id="sim-mode-select" onchange="changeSimMode(this.value)" style="background: var(--bg-dark); color: #fff; border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 0.8rem; cursor: pointer;">
+                                    <option value="latihan">MODE 1 — LATIHAN (Bebas Try)</option>
+                                    <option value="terbimbing" selected>MODE 2 — SIMULASI TERBIMBING</option>
+                                    <option value="mandiri">MODE 3 — SIMULASI MANDIRI</option>
+                                    <option value="tantangan">MODE 4 — TANTANGAN SKENARIO</option>
+                                    <option value="ujian">MODE 5 — UJIAN EVALUASI</option>
+                                </select>
+                                <button class="btn-secondary" style="padding: 4px 10px; font-size: 0.8rem;" onclick="showHint()">💡 PETUNJUK</button>
+                            </div>
+                        </div>
+
+                        <!-- Main Interactive SVG Canvas / Workspace Area -->
+                        <div class="sim-workspace" id="sim-canvas-area">
+                            
+                            <!-- Interactive Stage Container dynamically managed by JavaScript -->
+                            <div id="stage-interactive-wrapper" style="width: 100%; height: 100%; position: relative;">
+                                <!-- Content inserted via JS renderStage() -->
+                            </div>
+
+                            <!-- Bottom Floating Feedback Box -->
+                            <div class="sim-feedback-box" id="sim-feedback">
+                                <div class="feedback-text" id="feedback-msg">
+                                    <span>ℹ️ Klik objek interaktif untuk memulai prosedur operasional.</span>
+                                </div>
+                                <div style="display: flex; gap: 6px;" id="sim-nav-btns">
+                                    <button class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;" onclick="prevStage()">◀ Sblmnya</button>
+                                    <button class="btn-primary" style="padding: 6px 16px; font-size: 0.8rem;" id="btn-next-stage" onclick="nextStage()">Berikutnya ▶</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-pengembang" class="tab-panel">
+                    <div style="max-width: 800px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div class="card" style="align-items: center; text-align: center; padding: 2.5rem; background: linear-gradient(135deg, rgba(30,41,59,0.9), rgba(15,23,42,0.95)); border: 1px solid var(--accent-blue);">
+                            <div style="width: 100px; height: 100px; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin-bottom: 1rem; box-shadow: var(--glow-blue);">
+                                👨‍🏫
+                            </div>
+                            <h2 style="font-size: 1.6rem; color: #fff; font-weight: 800;">PEMILU SITORUS, M.Pd</h2>
+                            <p style="font-size: 1rem; color: var(--accent-cyan); font-weight: 700; margin-top: 4px;">Guru Fisika / Pengembang Media Pembelajaran Interaktif</p>
+                            <div style="width: 60px; height: 3px; background: var(--accent-blue); margin: 12px 0; border-radius: 2px;"></div>
+                            <p style="font-size: 0.9rem; color: var(--text-muted); max-width: 600px; line-height: 1.6;">
+                                Didedikasikan untuk memajukan pendidikan vokasi (SMK) melalui inovasi teknologi Educational Technology, Interactive Virtual Laboratory, Instructional Design, dan Gamifikasi Pembelajaran K3 & CHSE.
+                            </p>
+                        </div>
+
+                        <div class="grid-2">
+                            <div class="card">
+                                <h3 style="font-size: 1.05rem; color: var(--accent-cyan);">SPESIFIKASI APLIKASI</h3>
+                                <ul style="list-style: none; font-size: 0.85rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 8px; margin-top: 6px;">
+                                    <li>📌 <strong>Topik:</strong> CHSE, K3, & Kebersihan Higienis</li>
+                                    <li>🎯 <strong>Kurikulum:</strong> SMK Fase E</li>
+                                    <li>💻 <strong>Arsitektur:</strong> Single File Pure HTML5, CSS3, ES6 JavaScript</li>
+                                    <li>🔊 <strong>Audio:</strong> Native Web Audio API Synthesizer (Offline)</li>
+                                    <li>💾 <strong>Penyimpanan:</strong> HTML5 LocalStorage</li>
+                                </ul>
+                            </div>
+
+                            <div class="card">
+                                <h3 style="font-size: 1.05rem; color: var(--accent-amber);">CAPAIAN PEMBELAJARAN (CP)</h3>
+                                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-top: 6px;">
+                                    Peserta didik mampu membiasakan budaya kerja bersih, sehat, aman, dan ramah lingkungan; menerapkan tahapan K3, pengidentifikasian potensi bahaya, penggunaan APD, dan pengelolaan limbah secara mandiri maupun terstruktur.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+
+        <!-- FOOTER MINI -->
+        <footer style="height: 28px; background: #0b0f19; border-top: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; font-size: 0.72rem; color: var(--text-muted);">
+            <span>Laboratorium Maya Interaktif SMK • CHSE & K3</span>
+            <span>Dikembangkan oleh: <strong>Pemilu Sitorus, M.Pd</strong></span>
+        </footer>
+    </div>
+
+    
+    <!-- Reset Confirmation Modal -->
+    <div id="reset-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="font-size: 1.2rem; color: var(--accent-amber); display: flex; align-items: center; gap: 8px;">
+                <span>⚠️</span> Konfirmasi Reset Simulasi
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">
+                Apakah Anda yakin ingin mengulang simulasi dari awal? Semua skor, progress, dan catatan waktu saat ini akan diperbarui.
+            </p>
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+                <button class="btn-secondary" onclick="closeResetModal()">Batal</button>
+                <button class="btn-primary" style="background: var(--accent-red); box-shadow: var(--glow-red);" onclick="confirmReset()">Ya, Reset Simulasi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div id="gameover-modal" class="modal-overlay">
+        <div class="modal-content" style="border-color: var(--accent-red);">
+            <h3 style="font-size: 1.4rem; color: var(--accent-red); display: flex; align-items: center; gap: 8px;">
+                <span>💥</span> SIMULASI BERHENTI (GAME OVER)
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted);" id="gameover-desc">
+                Anda telah melakukan 3 kesalahan keselamatan serius. Pelajari kembali prosedur K3 dan keselamatan kerja sebelum mencoba lagi.
+            </p>
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.85rem; color: var(--text-light);" id="gameover-analysis">
+                <!-- Analysis info -->
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+                <button class="btn-primary" onclick="restartSimulation()">↻ Coba Lagi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Certificate / Final Result Modal -->
+    <div id="result-modal" class="modal-overlay">
+        <div class="cert-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.8rem; font-weight: 700; color: #64748b; letter-spacing: 1px;">VIRTUAL LAB SMK FASE E</span>
+                <span style="font-size: 0.8rem; font-weight: 700; color: #0284c7;" id="cert-date">2026</span>
+            </div>
+
+            <div>
+                <h2 class="cert-title">SER T I F I K A T   HASIL SIMULASI</h2>
+                <p class="cert-sub">TAHAPAN OPERASIONAL CHSE, KESELAMATAN KERJA, DAN HIGIENE</p>
+            </div>
+
+            <div style="margin: 0.5rem 0;">
+                <p style="font-size: 0.85rem; color: #64748b;">Diberikan kepada:</p>
+                <input type="text" id="student-name-input" value="Peserta Didik SMK" style="font-size: 1.3rem; font-weight: 800; text-align: center; border: none; border-bottom: 2px solid #0284c7; outline: none; padding: 4px; color: #0f172a; width: 80%; margin-top: 4px;">
+            </div>
+
+            <div class="cert-score-grid">
+                <div class="cert-score-box">
+                    <span>Prosedur</span>
+                    <span class="cert-score-val" id="cert-score-proc">30/30</span>
+                </div>
+                <div class="cert-score-box">
+                    <span>Safety K3</span>
+                    <span class="cert-score-val" id="cert-score-safe">25/25</span>
+                </div>
+                <div class="cert-score-box">
+                    <span>CHSE</span>
+                    <span class="cert-score-val" id="cert-score-chse">20/20</span>
+                </div>
+                <div class="cert-score-box">
+                    <span>Higiene</span>
+                    <span class="cert-score-val" id="cert-score-hyg">15/15</span>
+                </div>
+                <div class="cert-score-box">
+                    <span>Limbah</span>
+                    <span class="cert-score-val" id="cert-score-env">10/10</span>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-around; align-items: center; margin-top: 0.5rem;">
+                <div>
+                    <span style="font-size: 0.8rem; color: #64748b; display: block;">SKOR AKHIR</span>
+                    <span style="font-size: 2.2rem; font-weight: 900; color: #16a34a;" id="cert-total-score">100</span>
+                </div>
+                <div>
+                    <span style="font-size: 0.8rem; color: #64748b; display: block;">PREDIKAT / STATUS</span>
+                    <span style="font-size: 1.1rem; font-weight: 800; color: #0284c7;" id="cert-status">SANGAT BAIK (LULUS)</span>
+                </div>
+            </div>
+
+            <div style="border-top: 1px solid #e2e8f0; padding-top: 1rem; display: flex; justify-content: space-between; align-items: flex-end; font-size: 0.78rem; color: #64748b; text-align: left;">
+                <div>
+                    <p>Waktu Penyelesaian: <strong id="cert-time">04:12</strong></p>
+                    <p>Total Kesalahan: <strong id="cert-errors">0</strong></p>
+                </div>
+                <div style="text-align: right;">
+                    <p style="font-weight: 700; color: #0f172a;">Pemilu Sitorus, M.Pd</p>
+                    <p>Pengembang Virtual Lab SMK</p>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 10px; margin-top: 1rem;">
+                <button class="btn-secondary" onclick="closeResultModal()">Tutup</button>
+                <button class="btn-primary" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        // Centralized Application State
+        const appState = {
+            currentTab: 'teori',
+            currentStage: 0,
+            score: 0,
+            progress: 0,
+            lives: 3,
+            errors: 0,
+            timerSeconds: 0,
+            timerInterval: null,
+            soundEnabled: true,
+            simMode: 'terbimbing',
+            badges: {
+                chse: false,
+                safety: false,
+                hygiene: false,
+                champion: false,
+                master: false
+            },
+            scoreBreakdown: {
+                procedural: 0, // Max 30
+                safety: 0,     // Max 25
+                chse: 0,       // Max 20
+                hygiene: 0,    // Max 15
+                waste: 0       // Max 10
+            },
+            completedStages: new Array(8).fill(false)
+        };
+
+        // Web Audio API Synthesizer Sound System (Pure Offline)
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+        }
+
+        function playSound(type) {
+            if (!appState.soundEnabled) return;
+            try {
+                initAudio();
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'click') {
+                    osc.frequency.setValueAtTime(600, now);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'correct') {
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+                    osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now);
+                    osc.frequency.setValueAtTime(160, now + 0.1);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'warning') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.setValueAtTime(880, now + 0.15);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'complete') {
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.1);
+                    osc.frequency.setValueAtTime(783.99, now + 0.2);
+                    osc.frequency.setValueAtTime(1046.50, now + 0.3);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+                    osc.start(now);
+                    osc.stop(now + 0.6);
+                }
+            } catch (e) {
+                console.log('Audio init error:', e);
+            }
+        }
+
+        function toggleSound() {
+            appState.soundEnabled = !appState.soundEnabled;
+            const icon = document.getElementById('sound-icon');
+            const text = document.getElementById('sound-text');
+            if (appState.soundEnabled) {
+                icon.textContent = '🔊';
+                text.textContent = 'SOUND ON';
+                playSound('click');
+            } else {
+                icon.textContent = '🔇';
+                text.textContent = 'SOUND OFF';
+            }
+            saveStateToLocal();
+        }
+
+        const sopStages = [
+            { id: 0, title: "Pemeriksaan Diri", icon: "🧑‍🔬" },
+            { id: 1, title: "Kebersihan Tangan", icon: "🧼" },
+            { id: 2, title: "Penggunaan APD", icon: "🧤" },
+            { id: 3, title: "Pemeriksaan Area Kerja", icon: "🔍" },
+            { id: 4, title: "Penerapan Matriks CHSE", icon: "🌱" },
+            { id: 5, title: "Keselamatan & K3", icon: "⚠️" },
+            { id: 6, title: "Kebersihan Higienis", icon: "🧹" },
+            { id: 7, title: "Pengelolaan Limbah", icon: "🗑️" }
+        ];
+
+        function renderChecklist() {
+            const box = document.getElementById('checklist-box');
+            box.innerHTML = '';
+            sopStages.forEach((stage, idx) => {
+                const isDone = appState.completedStages[idx];
+                const isActive = appState.currentStage === idx;
+                
+                const item = document.createElement('div');
+                item.className = `check-item ${isDone ? 'done' : ''} ${isActive ? 'active' : ''}`;
+                item.innerHTML = `
+                    <div class="check-icon">${isDone ? '✓' : idx + 1}</div>
+                    <span>${stage.icon} ${stage.title}</span>
+                `;
+                item.onclick = () => {
+                    if (appState.simMode !== 'ujian') {
+                        setStage(idx);
+                    }
+                };
+                box.appendChild(item);
+            });
+        }
+
+        function enterLaboratory() {
+            playSound('click');
+            document.getElementById('splash-screen').style.display = 'none';
+            startTimer();
+            renderChecklist();
+            renderStage();
+            loadQuizQuestion();
+        }
+
+        function switchTab(tabName) {
+            playSound('click');
+            appState.currentTab = tabName;
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+
+            document.getElementById(`tab-btn-${tabName}`).classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        function startTimer() {
+            if (appState.timerInterval) clearInterval(appState.timerInterval);
+            appState.timerInterval = setInterval(() => {
+                appState.timerSeconds++;
+                const mins = String(Math.floor(appState.timerSeconds / 60)).padStart(2, '0');
+                const secs = String(appState.timerSeconds % 60).padStart(2, '0');
+                document.getElementById('timer-display').textContent = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function updateScore(delta, category = 'procedural') {
+            appState.score = Math.max(0, Math.min(100, appState.score + delta));
+            if (category in appState.scoreBreakdown) {
+                appState.scoreBreakdown[category] = Math.max(0, appState.scoreBreakdown[category] + delta);
+            }
+            document.getElementById('score-display').textContent = appState.score;
+            checkBadges();
+            saveStateToLocal();
+        }
+
+        function updateProgress() {
+            const completedCount = appState.completedStages.filter(Boolean).length;
+            appState.progress = Math.round((completedCount / sopStages.length) * 100);
+            
+            document.getElementById('progress-fill').style.width = `${appState.progress}%`;
+            document.getElementById('progress-text').textContent = `${appState.progress}%`;
+            document.getElementById('stage-text').textContent = `${appState.currentStage + 1} / ${sopStages.length}`;
+
+            if (appState.progress === 100) {
+                playSound('complete');
+                setTimeout(showResultModal, 600);
+            }
+        }
+
+        function registerMistake(isSerious = false) {
+            appState.errors++;
+            playSound('wrong');
+            if (isSerious) {
+                appState.lives--;
+                updateLivesDisplay();
+                if (appState.lives <= 0) {
+                    triggerGameOver();
+                }
+            } else {
+                updateScore(-2);
+            }
+        }
+
+        function updateLivesDisplay() {
+            const container = document.getElementById('lives-display');
+            let hearts = '';
+            for (let i = 0; i < 3; i++) {
+                hearts += i < appState.lives ? '❤️ ' : '🖤 ';
+            }
+            container.innerHTML = hearts;
+        }
+
+        function checkBadges() {
+            if (appState.score >= 20 && !appState.badges.chse) {
+                appState.badges.chse = true;
+                document.getElementById('badge-chse').classList.add('unlocked');
+            }
+            if (appState.score >= 40 && !appState.badges.safety) {
+                appState.badges.safety = true;
+                document.getElementById('badge-safety').classList.add('unlocked');
+            }
+            if (appState.score >= 60 && !appState.badges.hygiene) {
+                appState.badges.hygiene = true;
+                document.getElementById('badge-hygiene').classList.add('unlocked');
+            }
+            if (appState.score >= 80 && !appState.badges.champion) {
+                appState.badges.champion = true;
+                document.getElementById('badge-champion').classList.add('unlocked');
+            }
+            if (appState.score >= 95 && !appState.badges.master) {
+                appState.badges.master = true;
+                document.getElementById('badge-master').classList.add('unlocked');
+            }
+        }
+
+        function changeSimMode(mode) {
+            appState.simMode = mode;
+            document.getElementById('mode-indicator-side').textContent = mode.toUpperCase();
+            playSound('click');
+            renderStage();
+        }
+
+        function setStage(stageIdx) {
+            appState.currentStage = stageIdx;
+            renderChecklist();
+            renderStage();
+            updateProgress();
+        }
+
+        function nextStage() {
+            if (appState.currentStage < sopStages.length - 1) {
+                setStage(appState.currentStage + 1);
+            } else {
+                showResultModal();
+            }
+        }
+
+        function prevStage() {
+            if (appState.currentStage > 0) {
+                setStage(appState.currentStage - 1);
+            }
+        }
+
+        function showFeedback(text, isSuccess = true) {
+            const box = document.getElementById('feedback-msg');
+            box.innerHTML = `<span>${isSuccess ? '✅' : '⚠️'} ${text}</span>`;
+            if (isSuccess) {
+                playSound('correct');
+            } else {
+                playSound('warning');
+            }
+        }
+
+        function showHint() {
+            playSound('click');
+            const hints = [
+                "Periksa kesehatan diri, seragam, dan kebersihan kuku/rambut.",
+                "Ikuti 8 langkah cuci tangan higienis secara berurutan.",
+                "Pilih APD lengkap: Masker, Sarung Tangan, Sepatu K3, Apron, Penutup Kepala.",
+                "Temukan dan atasi potensi bahaya: lantai licin, kabel berserakan, cairan tumpah.",
+                "Terapkan matriks Cleanliness, Health, Safety, dan Environment.",
+                "Pilih aksi penanganan bahaya K3 secara tepat.",
+                "Lakukan sanitasi meja kerja dan peralatan hingga bersih.",
+                "Kelola limbah sesuai kategorinya: Organik, Anorganik, dan B3."
+            ];
+            showFeedback(`PETUNJUK: ${hints[appState.currentStage]}`, true);
+        }
+
+        function renderStage() {
+            const wrapper = document.getElementById('stage-interactive-wrapper');
+            const label = document.getElementById('sim-stage-label');
+            wrapper.innerHTML = '';
+
+            label.innerHTML = `<span>TAHAP ${appState.currentStage + 1}: ${sopStages[appState.currentStage].title.toUpperCase()}</span>`;
+
+            switch (appState.currentStage) {
+                case 0: // Self-Check
+                    renderStageSelfCheck(wrapper);
+                    break;
+                case 1: // Handwashing
+                    renderStageHandwashing(wrapper);
+                    break;
+                case 2: // APD Selection
+                    renderStageAPD(wrapper);
+                    break;
+                case 3: // Area Inspection & Hazards
+                    renderStageHazards(wrapper);
+                    break;
+                case 4: // CHSE Matrix
+                    renderStageCHSE(wrapper);
+                    break;
+                case 5: // Safety K3 Scenarios
+                    renderStageSafetyScenarios(wrapper);
+                    break;
+                case 6: // Hygiene Cleaning
+                    renderStageHygiene(wrapper);
+                    break;
+                case 7: // Waste Management
+                    renderStageWaste(wrapper);
+                    break;
+            }
+        }
+
+        // Stage 1: Self Check
+        function renderStageSelfCheck(container) {
+            container.innerHTML = `
+                <div style="display: flex; height: 100%; align-items: center; justify-content: center; gap: 2rem; padding: 1.5rem;">
+                    <!-- Worker Illustration -->
+                    <div style="background: var(--bg-card); border: 2px solid var(--accent-blue); border-radius: 16px; padding: 1.5rem; text-align: center; width: 280px; display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                        <div style="font-size: 4rem; background: rgba(15,23,42,0.6); width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent-cyan);">🧑‍🔬</div>
+                        <h4 style="font-size: 1.1rem; color: #fff;">Status Diri Operator</h4>
+                        <div id="self-check-status" style="font-size: 0.85rem; color: var(--accent-amber); font-weight: 600;">⚠️ Belum Diperiksa</div>
+                    </div>
+
+                    <!-- Checklist Interactive Choices -->
+                    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 400px; width: 100%;">
+                        <h4 style="font-size: 1rem; color: var(--accent-cyan);">Klik Seluruh Item Pemeriksaan Diri:</h4>
+                        
+                        <button class="quiz-btn" id="sc-btn-1" onclick="checkSelfItem(1, 'Seragam Kerja Bersih & Rapi')">
+                            <span>👕 Seragam Kerja Rapi</span>
+                        </button>
+                        <button class="quiz-btn" id="sc-btn-2" onclick="checkSelfItem(2, 'Kuku Pendek & Bersih')">
+                            <span>💅 Kuku Pendek & Sanitized</span>
+                        </button>
+                        <button class="quiz-btn" id="sc-btn-3" onclick="checkSelfItem(3, 'Rambut Rapi / Penutup Kepala')">
+                            <span>💈 Rambut Terikat / Penutup Kepala</span>
+                        </button>
+                        <button class="quiz-btn" id="sc-btn-4" onclick="checkSelfItem(4, 'Kondisi Kesehatan Fit')">
+                            <span>🩺 Kondisi Fit / Tidak Sakit</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        let selfCheckedCount = 0;
+        function checkSelfItem(id, name) {
+            const btn = document.getElementById(`sc-btn-${id}`);
+            if (!btn.classList.contains('correct')) {
+                btn.classList.add('correct');
+                selfCheckedCount++;
+                playSound('correct');
+                showFeedback(`Pemeriksaan berhasil: ${name}`);
+                
+                if (selfCheckedCount >= 4) {
+                    document.getElementById('self-check-status').innerHTML = '✅ LULUS STANDAR K3 DIRI';
+                    document.getElementById('self-check-status').style.color = 'var(--accent-green)';
+                    appState.completedStages[0] = true;
+                    updateScore(12, 'procedural');
+                    updateProgress();
+                    renderChecklist();
+                }
+            }
+        }
+
+        // Stage 2: Handwashing 8 Steps
+        let handStep = 0;
+        const handStepsText = [
+            "1. Membasahi tangan dengan air mengalir",
+            "2. Tuangkan sabun antiseptik secukupnya",
+            "3. Gosok telapak tangan secara merata",
+            "4. Gosok punggung tangan dan sela jari",
+            "5. Bersihkan sela-sela jari bagian dalam",
+            "6. Bersihkan kuku dan ujung jari",
+            "7. Bilas dengan air bersih mengalir",
+            "8. Keringkan dengan tisu steril / lap bersih"
+        ];
+
+        function renderStageHandwashing(container) {
+            container.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 1.5rem; text-align: center;">
+                    <div style="background: var(--bg-card); border: 2px solid var(--accent-cyan); padding: 1.5rem; border-radius: 16px; width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                        <div style="font-size: 3.5rem; width: 90px; height: 90px; background: rgba(6,182,212,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">🧼</div>
+                        <h3 style="font-size: 1.2rem; color: #fff;">Simulasi 8 Langkah Cuci Tangan Higienis</h3>
+                        <p style="font-size: 0.95rem; color: var(--accent-cyan); font-weight: 700;" id="hand-step-label">${handStepsText[handStep]}</p>
+                        
+                        <div style="width: 100%; background: #0f172a; height: 12px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color);">
+                            <div id="hand-progress-fill" style="width: ${(handStep / 8) * 100}%; height: 100%; background: var(--accent-cyan); transition: width 0.3s;"></div>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" style="padding: 12px 28px; font-size: 1rem;" onclick="advanceHandwash()">
+                        <span>Lakukan Langkah Ini ➔</span>
+                    </button>
+                </div>
+            `;
+        }
+
+        function advanceHandwash() {
+            if (handStep < 8) {
+                handStep++;
+                playSound('correct');
+                if (handStep < 8) {
+                    document.getElementById('hand-step-label').textContent = handStepsText[handStep];
+                    document.getElementById('hand-progress-fill').style.width = `${(handStep / 8) * 100}%`;
+                } else {
+                    document.getElementById('hand-step-label').textContent = "✅ Cuci Tangan Higienis Selesai!";
+                    document.getElementById('hand-progress-fill').style.width = '100%';
+                    appState.completedStages[1] = true;
+                    updateScore(13, 'hygiene');
+                    updateProgress();
+                    renderChecklist();
+                    showFeedback("Prosedur cuci tangan higienis berhasil diselesaikan sesuai standar!");
+                }
+            }
+        }
+
+        // Stage 3: APD Selection
+        const selectedAPD = new Set();
+        function renderStageAPD(container) {
+            container.innerHTML = `
+                <div style="display: flex; flex-direction: column; height: 100%; gap: 1rem; padding: 1rem;">
+                    <div style="text-align: center;">
+                        <h3 style="font-size: 1.1rem; color: #fff;">Pilih Alat Pelindung Diri (APD) Wajib Operasional:</h3>
+                        <p style="font-size: 0.82rem; color: var(--text-muted);">Pilih 5 APD standar keselamatan & kebersihan sebelum bekerja.</p>
+                    </div>
+
+                    <div class="grid-4" style="max-width: 700px; margin: 0 auto; width: 100%;">
+                        <div class="card" id="apd-mask" onclick="toggleAPD('mask', 'Masker Medis')" style="cursor: pointer; text-align: center; align-items: center;">
+                            <div style="font-size: 2.5rem;">😷</div>
+                            <div class="card-title" style="font-size: 0.9rem;">Masker Medis</div>
+                        </div>
+
+                        <div class="card" id="apd-gloves" onclick="toggleAPD('gloves', 'Sarung Tangan Steril')" style="cursor: pointer; text-align: center; align-items: center;">
+                            <div style="font-size: 2.5rem;">🧤</div>
+                            <div class="card-title" style="font-size: 0.9rem;">Sarung Tangan</div>
+                        </div>
+
+                        <div class="card" id="apd-shoes" onclick="toggleAPD('shoes', 'Sepatu Safety K3')" style="cursor: pointer; text-align: center; align-items: center;">
+                            <div style="font-size: 2.5rem;">🥾</div>
+                            <div class="card-title" style="font-size: 0.9rem;">Sepatu Safety K3</div>
+                        </div>
+
+                        <div class="card" id="apd-cap" onclick="toggleAPD('cap', 'Penutup Kepala')" style="cursor: pointer; text-align: center; align-items: center;">
+                            <div style="font-size: 2.5rem;">🧢</div>
+                            <div class="card-title" style="font-size: 0.9rem;">Penutup Kepala</div>
+                        </div>
+
+                        <div class="card" id="apd-apron" onclick="toggleAPD('apron', 'Apron / Celemek')" style="cursor: pointer; text-align: center; align-items: center;">
+                            <div style="font-size: 2.5rem;">🥼</div>
+                            <div class="card-title" style="font-size: 0.9rem;">Apron Pelindung</div>
+                        </div>
+
+                        <div class="card" id="apd-watch" onclick="toggleAPD('watch', 'Jam Tangan Lengang')" style="cursor: pointer; text-align: center; align-items: center; border-color: var(--accent-red);">
+                            <div style="font-size: 2.5rem;">⌚</div>
+                            <div class="card-title" style="font-size: 0.9rem;">Jam Tangan Aksesoris</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleAPD(type, name) {
+            if (type === 'watch') {
+                registerMistake(true);
+                showFeedback("SALAH: Perhiasan / jam tangan tidak boleh dipakai saat operasional kerja!", false);
+                return;
+            }
+
+            const card = document.getElementById(`apd-${type}`);
+            if (!selectedAPD.has(type)) {
+                selectedAPD.add(type);
+                card.style.borderColor = 'var(--accent-green)';
+                card.style.background = 'rgba(16, 185, 129, 0.15)';
+                playSound('correct');
+                showFeedback(`APD Terpasang: ${name}`);
+
+                if (selectedAPD.size >= 5) {
+                    appState.completedStages[2] = true;
+                    updateScore(15, 'safety');
+                    updateProgress();
+                    renderChecklist();
+                    showFeedback("Penggunaan APD Lengkap & Sesuai Standar K3!");
+                }
+            }
+        }
+
+        // Stage 4: Hazards Inspection
+        const clearedHazards = new Set();
+        function renderStageHazards(container) {
+            container.innerHTML = `
+                <div style="position: relative; width: 100%; height: 100%; background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);">
+                    <div style="position: absolute; top: 10px; left: 10px; font-size: 0.85rem; color: var(--accent-cyan); font-weight: 700;">
+                        🔍 Inspeksi Area Kerja: Temukan & Tangani 3 Potensi Bahaya K3!
+                    </div>
+
+                    <!-- Hazard 1: Wet Floor -->
+                    <div id="haz-wet" class="interactive-zone pulse" style="top: 60%; left: 20%; background: rgba(239, 68, 68, 0.2); border: 2px dashed var(--accent-red);" onclick="fixHazard('wet', 'Lantai Licin Cepat Diperbaiki & Dipasang Sign Safety')">
+                        <span style="font-size: 2rem;">🌊</span>
+                        <span style="font-size: 0.75rem; color: var(--accent-red); font-weight: 700;">Lantai Licin!</span>
+                    </div>
+
+                    <!-- Hazard 2: Loose Wire -->
+                    <div id="haz-wire" class="interactive-zone pulse" style="top: 30%; left: 55%; background: rgba(245, 158, 11, 0.2); border: 2px dashed var(--accent-amber);" onclick="fixHazard('wire', 'Kabel Berserakan Dirapikan dengan Kabel Protektor')">
+                        <span style="font-size: 2rem;">⚡</span>
+                        <span style="font-size: 0.75rem; color: var(--accent-amber); font-weight: 700;">Kabel Berserakan!</span>
+                    </div>
+
+                    <!-- Hazard 3: Blocked Evacuation -->
+                    <div id="haz-door" class="interactive-zone pulse" style="top: 20%; left: 80%; background: rgba(239, 68, 68, 0.2); border: 2px dashed var(--accent-red);" onclick="fixHazard('door', 'Jalur Evakuasi Dibebaskan dari Penghalang')">
+                        <span style="font-size: 2rem;">🚪</span>
+                        <span style="font-size: 0.75rem; color: var(--accent-red); font-weight: 700;">Evakuasi Terhalang!</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function fixHazard(type, desc) {
+            if (!clearedHazards.has(type)) {
+                clearedHazards.add(type);
+                const el = document.getElementById(`haz-${type}`);
+                el.classList.remove('pulse');
+                el.style.background = 'rgba(16, 185, 129, 0.2)';
+                el.style.borderColor = 'var(--accent-green)';
+                playSound('correct');
+                showFeedback(`Mitigasi Bahaya: ${desc}`);
+
+                if (clearedHazards.size >= 3) {
+                    appState.completedStages[3] = true;
+                    updateScore(15, 'safety');
+                    updateProgress();
+                    renderChecklist();
+                    showFeedback("Area Kerja Aman & Bebas dari Potensi Bahaya K3!");
+                }
+            }
+        }
+
+        // Stage 5: CHSE Matrix
+        const chseClicked = new Set();
+        function renderStageCHSE(container) {
+            container.innerHTML = `
+                <div style="display: flex; flex-direction: column; height: 100%; gap: 1rem; padding: 1rem;">
+                    <div style="text-align: center;">
+                        <h3 style="font-size: 1.1rem; color: #fff;">Matriks Integrasi Standar CHSE</h3>
+                        <p style="font-size: 0.82rem; color: var(--text-muted);">Klik setiap pilar CHSE untuk memverifikasi kesiapan operasional.</p>
+                    </div>
+
+                    <div class="grid-2" style="max-width: 650px; margin: 0 auto; width: 100%;">
+                        <div class="card" id="chse-c" onclick="verifyCHSE('c', 'Cleanliness: Sterilisasi Alat & Area Kerja')" style="cursor: pointer;">
+                            <h4 style="color: var(--accent-green);">C — CLEANLINESS</h4>
+                            <p style="font-size: 0.82rem; color: var(--text-muted);">Sanitasi rutin dan kebersihan diri serta perlengkapan kerja.</p>
+                        </div>
+                        <div class="card" id="chse-h" onclick="verifyCHSE('h', 'Health: Pemeriksaan Suhu & Bebas Kontaminasi')" style="cursor: pointer;">
+                            <h4 style="color: var(--accent-blue);">H — HEALTH</h4>
+                            <p style="font-size: 0.82rem; color: var(--text-muted);">Prosedur pencegahan penyakit dan kesehatan pekerja terjaga.</p>
+                        </div>
+                        <div class="card" id="chse-s" onclick="verifyCHSE('s', 'Safety: Kesiapan APAR, Jalur Evakuasi & APD')" style="cursor: pointer;">
+                            <h4 style="color: var(--accent-amber);">S — SAFETY</h4>
+                            <p style="font-size: 0.82rem; color: var(--text-muted);">Pencegahan kecelakaan dan perlindungan K3 komprehensif.</p>
+                        </div>
+                        <div class="card" id="chse-e" onclick="verifyCHSE('e', 'Environment: Pemilahan B3 & Penghematan Energi')" style="cursor: pointer;">
+                            <h4 style="color: var(--accent-cyan);">E — ENVIRONMENT</h4>
+                            <p style="font-size: 0.82rem; color: var(--text-muted);">Ramah lingkungan dan efisiensi sumber daya operasional.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function verifyCHSE(key, msg) {
+            if (!chseClicked.has(key)) {
+                chseClicked.add(key);
+                document.getElementById(`chse-${key}`).style.borderColor = 'var(--accent-green)';
+                playSound('correct');
+                showFeedback(`Terverifikasi: ${msg}`);
+
+                if (chseClicked.size >= 4) {
+                    appState.completedStages[4] = true;
+                    updateScore(15, 'chse');
+                    updateProgress();
+                    renderChecklist();
+                    showFeedback("Standar CHSE Terintegrasi Sempurna!");
+                }
+            }
+        }
+
+        // Stage 6: Safety K3 Scenarios
+        function renderStageSafetyScenarios(container) {
+            container.innerHTML = `
+                <div style="display: flex; flex-direction: column; justify-content: center; height: 100%; gap: 1rem; max-width: 600px; margin: 0 auto; width: 100%;">
+                    <div class="card" style="border-color: var(--accent-amber);">
+                        <h4 style="color: var(--accent-amber); font-size: 1rem;">SKENARIO K3: Ditemukan Tumpahan Kimia Cair di Lantai</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">
+                            Apa tindakan operasional pertama yang paling tepat sesuai dengan prosedur keselamatan kerja?
+                        </p>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <button class="quiz-btn" onclick="handleSafetyScenario(false, 'Membiarkan tumpahan dapat menyebabkan risiko terpeleset dan kontaminasi!')">
+                            A. Membiarkannya kering sendiri
+                        </button>
+                        <button class="quiz-btn" onclick="handleSafetyScenario(true, 'BENAR: Beri sign peringatan, gunakan APD sesuai, dan bersihkan dengan bahan penyerap kusus.')">
+                            B. Pasang papan peringatan bahaya, gunakan APD, lalu bersihkan dengan absorbent kit
+                        </button>
+                        <button class="quiz-btn" onclick="handleSafetyScenario(false, 'Menutupinya tanpa membersihkan tetap membahayakan pekerja lain.')">
+                            C. Menutupinya dengan kain lap biasa tanpa APD
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleSafetyScenario(isCorrect, feedback) {
+            if (isCorrect) {
+                playSound('correct');
+                showFeedback(feedback, true);
+                appState.completedStages[5] = true;
+                updateScore(10, 'safety');
+                updateProgress();
+                renderChecklist();
+            } else {
+                registerMistake(true);
+                showFeedback(`SALAH: ${feedback}`, false);
+            }
+        }
+
+        // Stage 7: Hygiene Cleaning Procedure
+        let cleanProgressVal = 0;
+        function renderStageHygiene(container) {
+            container.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 1.5rem; text-align: center;">
+                    <div class="card" style="max-width: 450px; width: 100%; align-items: center;">
+                        <div style="font-size: 3.5rem;">🧹</div>
+                        <h3 style="font-size: 1.1rem; color: #fff;">Sanitasi & Pembersihan Higienis Area Kerja</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">Tekan tombol di bawah untuk menyeka meja & mengaplikasikan disinfektan.</p>
+                        
+                        <div style="width: 100%; background: #0f172a; height: 12px; border-radius: 6px; overflow: hidden; margin-top: 10px; border: 1px solid var(--border-color);">
+                            <div id="clean-fill" style="width: ${cleanProgressVal}%; height: 100%; background: var(--accent-green); transition: width 0.2s;"></div>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" onclick="doCleanStep()">
+                        <span>✨ Aplikaskan Disinfektan & Usap (Klik)</span>
+                    </button>
+                </div>
+            `;
+        }
+
+        function doCleanStep() {
+            if (cleanProgressVal < 100) {
+                cleanProgressVal += 25;
+                playSound('click');
+                document.getElementById('clean-fill').style.width = `${cleanProgressVal}%`;
+
+                if (cleanProgressVal >= 100) {
+                    playSound('correct');
+                    appState.completedStages[6] = true;
+                    updateScore(10, 'hygiene');
+                    updateProgress();
+                    renderChecklist();
+                    showFeedback("Permukaan meja kerja & alat bersih serta tersterilisasi higienis!");
+                }
+            }
+        }
+
+        // Stage 8: Waste Sorting
+        const sortedWaste = new Set();
+        function renderStageWaste(container) {
+            container.innerHTML = `
+                <div style="display: flex; flex-direction: column; height: 100%; gap: 1rem; padding: 1rem;">
+                    <div style="text-align: center;">
+                        <h3 style="font-size: 1.1rem; color: #fff;">Pengelolaan & Pemilahan Limbah</h3>
+                        <p style="font-size: 0.82rem; color: var(--text-muted);">Masukkan jenis limbah berikut ke dalam tempat sampah yang tepat.</p>
+                    </div>
+
+                    <div style="display: flex; justify-content: center; gap: 1.5rem; margin-top: 1rem;">
+                        <!-- Organik -->
+                        <div style="background: rgba(16,185,129,0.1); border: 2px solid var(--accent-green); border-radius: 12px; padding: 1rem; width: 160px; text-align: center;" onclick="sortWasteItem('organik')">
+                            <div style="font-size: 2.5rem;">🟢</div>
+                            <h4 style="font-size: 0.9rem; color: var(--accent-green);">ORGANIK</h4>
+                            <p style="font-size: 0.72rem; color: var(--text-muted);">Sisa Makanan & Dedaunan</p>
+                        </div>
+
+                        <!-- Anorganik -->
+                        <div style="background: rgba(245,158,11,0.1); border: 2px solid var(--accent-amber); border-radius: 12px; padding: 1rem; width: 160px; text-align: center;" onclick="sortWasteItem('anorganik')">
+                            <div style="font-size: 2.5rem;">🟡</div>
+                            <h4 style="font-size: 0.9rem; color: var(--accent-amber);">ANORGANIK</h4>
+                            <p style="font-size: 0.72rem; color: var(--text-muted);">Plastik & Kertas Kebersihan</p>
+                        </div>
+
+                        <!-- B3 -->
+                        <div style="background: rgba(239,68,68,0.1); border: 2px solid var(--accent-red); border-radius: 12px; padding: 1rem; width: 160px; text-align: center;" onclick="sortWasteItem('b3')">
+                            <div style="font-size: 2.5rem;">🔴</div>
+                            <h4 style="font-size: 0.9rem; color: var(--accent-red);">LIMBAH B3</h4>
+                            <p style="font-size: 0.72rem; color: var(--text-muted);">Bahan Kimia & Masker Bekas</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function sortWasteItem(type) {
+            if (!sortedWaste.has(type)) {
+                sortedWaste.add(type);
+                playSound('correct');
+                showFeedback(`Limbah ${type.toUpperCase()} terpisahkan sesuai wadah ramah lingkungan.`);
+
+                if (sortedWaste.size >= 3) {
+                    appState.completedStages[7] = true;
+                    updateScore(10, 'waste');
+                    updateProgress();
+                    renderChecklist();
+                    showFeedback("Pengelolaan limbah terpisah 100% lengkap & ramah lingkungan!");
+                }
+            }
+        }
+
+        const quizQuestions = [
+            {
+                q: "Apa kepanjangan dari standar CHSE dalam operasional kerja?",
+                options: ["Cleanliness, Health, Safety, Environment", "Clean, Healthy, Safe, Eco", "Care, Health, Safety, Energy", "Cleanliness, Hygiene, Safety, Ecology"],
+                answer: 0,
+                hint: "Merupakan fondasi kebersihan, kesehatan, keselamatan, dan lingkungan."
+            },
+            {
+                q: "Tindakan mencuci tangan menggunakan sabun mengalir harus dilakukan selama minimal...?",
+                options: ["5 detik", "20 detik", "2 menit", "10 menit"],
+                answer: 1,
+                hint: "Durasi standar WHO untuk merusak dinding lemak virus/bakteri."
+            },
+            {
+                q: "APD manakah yang wajib digunakan untuk melindungi pernapasan dari paparan debu dan partikel mikro?",
+                options: ["Goggles", "Apron", "Masker Medis", "Penutup Telinga"],
+                answer: 2,
+                hint: "Menutupi hidung dan mulut."
+            },
+            {
+                q: "Jika menemukan lantai dalam kondisi licin atau basah, tindakan pertama yang benar adalah...?",
+                options: ["Abaikan", "Memasang papan tanda peringatan bahaya licin", "Berlari melintasinya", "Menutupinya dengan kertas"],
+                answer: 1,
+                hint: "Pemberian visual hazard warning kepada pekerja lain."
+            },
+            {
+                q: "Tempat sampah berwarna merah diperuntukkan bagi kategori limbah jenis apa?",
+                options: ["Organik", "Anorganik", "Bahan Berbahaya dan Beracun (B3)", "Kertas Daur Ulang"],
+                answer: 2,
+                hint: "Warna merah identik dengan bahaya/B3."
+            },
+            {
+                q: "Pemeriksaan kuku dan rambut operator kerja termasuk ke dalam bagian prosedur...?",
+                options: ["Pemeriksaan Kondisi Diri", "Sanitasi Alat", "Pengelolaan Limbah", "Inspeksi Kelistrikan"],
+                answer: 0,
+                hint: "Dilakukan sebelum memakai APD."
+            },
+            {
+                q: "Manakah tindakan yang melanggar budaya K3 di area operasional?",
+                options: ["Menggunakan sepatu safety tertutup", "Membiarkan kabel terkelupas di jalur berjalan", "Mengikat rambut panjang", "Melakukan disinfeksi permukaan kerja"],
+                answer: 1,
+                hint: "Berpotensi menimbulkan risiko tersandung dan sengatan listrik."
+            },
+            {
+                q: "Prinsip Environment (E) pada CHSE berfokus pada...?",
+                options: ["Pencegahan terpeleset", "Efisiensi energi dan pengelolaan limbah ramah lingkungan", "Mencuci tangan 8 langkah", "Pemakaian apron steril"],
+                answer: 1,
+                hint: "Menjaga keberlanjutan ekosistem lingkungan sekitar."
+            },
+            {
+                q: "Mengapa perhiasan atau jam tangan tidak boleh dipakai saat operasional higienis?",
+                options: ["Bisa hilang", "Menjadi tempat sarang kuman dan merusak sarung tangan", "Terlalu mahal", "Merusak pakaian"],
+                answer: 1,
+                hint: "Celah perhiasan sulit disterilkan dan rentan kontaminasi silang."
+            },
+            {
+                q: "Prosedur sanitasi alat kerja dilakukan pada saat...?",
+                options: ["Hanya saat diawasi", "Sebelum dan setelah aktivitas operasional", "Setahun sekali", "Saat peralatan rusak"],
+                answer: 1,
+                hint: "Menjamin kesterilan sebelum dan sesudah kerja."
+            },
+            {
+                q: "Jalur evakuasi di dalam gedung laboratorium/area kerja harus...?",
+                options: ["Selalu bebas dari barang penutup/penghalang", "Boleh ditumpuk kardus sisa", "Dikunci rapat setiap saat", "Digunakan untuk tempat sampah"],
+                answer: 0,
+                hint: "Akses darurat tidak boleh terhalang."
+            },
+            {
+                q: "Urutan penggunaan APD yang benar dimulai dari...?",
+                options: ["Sarung tangan → Penutup Kepala", "Penutup Kepala/Apron → Masker → Sepatu Safety → Sarung Tangan Steril", "Sepatu Safety → Sarung Tangan → Tanpa Masker", "Sarung tangan dulu baru cuci tangan"],
+                answer: 1,
+                hint: "Sarung tangan dipasang paling akhir agar tetap steril."
+            },
+            {
+                q: "Limbah berupa sisa bahan makanan cair sebaiknya dimasukkan ke...?",
+                options: ["Tempat sampah kering", "Penampungan limbah cair tersaring khusus", "Dibuang langsung ke lantai", "Tempat limbah B3"],
+                answer: 1,
+                hint: "Penanganan limbah cair organik."
+            },
+            {
+                q: "Tujuan utama penerapan budaya K3 di lingkungan SMK adalah...?",
+                options: ["Menghabiskan anggaran", "Mencegah kecelakaan kerja dan menciptakan lingkungan sehat", "Membuat aturan rumit", "Mempersulit pekerjaan"],
+                answer: 1,
+                hint: "Keselamatan dan kesehatan manusia adalah prioritas tertinggi."
+            },
+            {
+                q: "Sikap yang mencerminkan kecakapan Problem-Based Learning K3 adalah...?",
+                options: ["Menunggu perintah saat ada bahaya", "Cepat tanggap mengidentifikasi dan memitigasi risiko bahaya", "Apatis terhadap lingkungan licin", "Melepas APD saat bekerja"],
+                answer: 1,
+                hint: "Proaktif dan responsif terhadap bahaya."
+            }
+        ];
+
+        let currentQuizIdx = 0;
+
+        function loadQuizQuestion() {
+            const q = quizQuestions[currentQuizIdx];
+            document.getElementById('quiz-progress-num').textContent = `Soal ${currentQuizIdx + 1} / ${quizQuestions.length}`;
+            document.getElementById('quiz-question').textContent = q.q;
+            
+            const optionsBox = document.getElementById('quiz-options-box');
+            optionsBox.innerHTML = '';
+            
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-btn';
+                btn.innerHTML = `<span>${String.fromCharCode(65 + idx)}.</span> <span>${opt}</span>`;
+                btn.onclick = () => answerQuiz(idx);
+                optionsBox.appendChild(btn);
+            });
+
+            document.getElementById('quiz-feedback').style.display = 'none';
+        }
+
+        function answerQuiz(selectedIdx) {
+            const q = quizQuestions[currentQuizIdx];
+            const feedbackEl = document.getElementById('quiz-feedback');
+            feedbackEl.style.display = 'block';
+
+            const optionsBtns = document.querySelectorAll('.quiz-options .quiz-btn');
+            optionsBtns.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === q.answer) {
+                    btn.classList.add('correct');
+                } else if (idx === selectedIdx) {
+                    btn.classList.add('wrong');
+                }
+            });
+
+            if (selectedIdx === q.answer) {
+                playSound('correct');
+                feedbackEl.style.background = 'rgba(16, 185, 129, 0.2)';
+                feedbackEl.style.color = 'var(--accent-green)';
+                feedbackEl.innerHTML = `✅ BENAR! ${q.hint}`;
+            } else {
+                playSound('wrong');
+                feedbackEl.style.background = 'rgba(239, 68, 68, 0.2)';
+                feedbackEl.style.color = 'var(--accent-red)';
+                feedbackEl.innerHTML = `❌ KURANG TEPAT. ${q.hint}`;
+            }
+        }
+
+        function nextQuizQuestion() {
+            playSound('click');
+            currentQuizIdx = (currentQuizIdx + 1) % quizQuestions.length;
+            loadQuizQuestion();
+        }
+
+        function promptReset() {
+            playSound('click');
+            document.getElementById('reset-modal').classList.add('active');
+        }
+
+        function closeResetModal() {
+            playSound('click');
+            document.getElementById('reset-modal').classList.remove('active');
+        }
+
+        function confirmReset() {
+            closeResetModal();
+            appState.score = 0;
+            appState.progress = 0;
+            appState.lives = 3;
+            appState.errors = 0;
+            appState.timerSeconds = 0;
+            appState.currentStage = 0;
+            appState.completedStages.fill(false);
+            
+            document.getElementById('score-display').textContent = '0';
+            updateLivesDisplay();
+            renderChecklist();
+            renderStage();
+            showFeedback("Simulasi telah di-reset sepenuhnya ke kondisi awal.");
+            saveStateToLocal();
+        }
+
+        function triggerGameOver() {
+            playSound('warning');
+            const modal = document.getElementById('gameover-modal');
+            document.getElementById('gameover-analysis').innerHTML = `
+                <p>📍 <strong>Analisis Kegagalan:</strong> Terjadi ${appState.errors} kesalahan keselamatan kerja.</p>
+                <p>💡 <strong>Saran Perbaikan:</strong> Pelajari kembali SOP K3, penggunaan APD, dan penanganan potensi bahaya di Tab Prosedur.</p>
+            `;
+            modal.classList.add('active');
+        }
+
+        function restartSimulation() {
+            document.getElementById('gameover-modal').classList.remove('active');
+            confirmReset();
+        }
+
+        function showResultModal() {
+            const modal = document.getElementById('result-modal');
+            document.getElementById('cert-total-score').textContent = appState.score;
+            
+            let status = 'SANGAT BAIK (LULUS)';
+            if (appState.score < 70) status = 'PERLU PENGUATAN';
+            else if (appState.score < 80) status = 'CUKUP (LULUS)';
+            else if (appState.score < 90) status = 'BAIK (LULUS)';
+
+            document.getElementById('cert-status').textContent = status;
+            document.getElementById('cert-time').textContent = document.getElementById('timer-display').textContent;
+            document.getElementById('cert-errors').textContent = appState.errors;
+
+            modal.classList.add('active');
+        }
+
+        function closeResultModal() {
+            playSound('click');
+            document.getElementById('result-modal').classList.remove('active');
+        }
+
+        // LocalStorage helpers
+        function saveStateToLocal() {
+            try {
+                localStorage.setItem('vlab_smk_chse_state', JSON.stringify({
+                    score: appState.score,
+                    soundEnabled: appState.soundEnabled,
+                    badges: appState.badges
+                }));
+            } catch (e) {
+                console.log('LocalStorage save error:', e);
+            }
+        }
+
+        function loadStateFromLocal() {
+            try {
+                const data = localStorage.getItem('vlab_smk_chse_state');
+                if (data) {
+                    const parsed = JSON.parse(data);
+                    appState.score = parsed.score || 0;
+                    appState.soundEnabled = parsed.soundEnabled ?? true;
+                    appState.badges = parsed.badges || appState.badges;
+                    
+                    document.getElementById('score-display').textContent = appState.score;
+                    checkBadges();
+                }
+            } catch (e) {
+                console.log('LocalStorage load error:', e);
+            }
+        }
+
+        // App Initialization
+        window.onload = () => {
+            loadStateFromLocal();
+            renderChecklist();
+            updateLivesDisplay();
+        };
+    </script>
+</body>
+</html>
